@@ -27,8 +27,8 @@
 
 ## 📌 Project Overview
 
-**Project Title:** `[Your Project Title Here]`  
-**Group Name / Number:** `[Group Name / Number]`  
+**Project Title:** `Your Project Title Here`  
+**Group Name / Number:** `circuit-scribe`  
 **Presentation Date:** End of April 2026
 
 ---
@@ -39,7 +39,7 @@
 |---|---|---|
 | [Name Surname] | [Student No.] | [e.g. Hardware Lead] |
 | [Name Surname] | [Student No.] | [e.g. Software Lead] |
-| [Name Surname] | [Student No.] | [e.g. Documentation Lead] |
+| Mpumelelo Sithole | 230526934 | Documentation Lead |
 | [Name Surname] | [Student No.] | [e.g. Testing Lead] |
 
 ---
@@ -47,15 +47,21 @@
 ## 💡 Project Idea & Problem Statement
 
 ### Problem Statement
-> _Describe the problem your IoT solution addresses. Be specific._
+Car theft remains a major issue, especially when traditional security methods such as keys, remotes, or PIN-based systems can be stolen, duplicated, or bypassed. There is a need for a more secure and intelligent system that ensures only authorized individuals can start a vehicle.
 
 ### Proposed Solution
-> _Explain how your IoT device/system solves the problem._
+The project proposes an AI-powered facial recognition system integrated into a mini smart car. A camera mounted on the dashboard captures the driver's face and verifies identity using facial recognition.
+
+If the face is recognized → the system allows the engine (DC motor) to start
+If not recognized → the engine remains locked
+
+The system uses infrared (IR) technology to function in low-light or night conditions.
 
 ### Objectives
-- [ ] Objective 1
-- [ ] Objective 2
-- [ ] Objective 3
+- Develop a facial recognition system using AI
+- Enable secure engine access control
+- Implement night detection using infrared lighting
+- Integrate hardware and software into a working IoT prototype
 
 ---
 
