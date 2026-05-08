@@ -27,8 +27,8 @@
 
 ## 📌 Project Overview
 
-**Project Title:** `Your Project Title Here`  
-**Group Name / Number:** `circuit-scribe`  
+**Project Title:** `Smart Car System`  
+**Group Name / Number:** `circuit-scribes`  
 **Presentation Date:** End of April 2026
 
 ---
@@ -38,7 +38,7 @@
 | Student Name | Student Number | Role / Responsibility |
 |---|---|---|
 | [Name Surname] | [Student No.] | [e.g. Hardware Lead] |
-| [Name Surname] | [Student No.] | [e.g. Software Lead] |
+| Jayden Avontuur | 222032278| Software Lead |
 | Mpumelelo Sithole | 230526934 | Documentation Lead |
 | [Name Surname] | [Student No.] | [e.g. Testing Lead] |
 
