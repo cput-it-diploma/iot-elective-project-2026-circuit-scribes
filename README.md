@@ -37,11 +37,11 @@
 
 | Student Name | Student Number | Role / Responsibility |
 |---|---|---|
-| [ Mvuyisi Mchithwa ] | [ 220452709 ] | [ Hardware Lead ] |
+| Mvuyisi Mchithwa  | 220452709 | Hardware Lead |
 | Jayden Avontuur | 222032278 | Hardware Lead |
 | Stephanie Tola Oluwafemi Lewu | 230211216 | Documentation Lead |
-| [ Mpumelelo Sithole ] | [ 230526934 ] | [ Testing Lead] |
-| [ Owen Jnr Makene ] | [ 223219665 ] | [ Coding Lead ] |
+| Mpumelelo Sithole  | 230526934 | Testing Lead |
+| Owen Jnr Makene | 223219665 | Coding Lead |
 
 ---
 
