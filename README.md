@@ -29,7 +29,7 @@
 
 **Project Title:** `Smart Car System`  
 **Group Name / Number:** `circuit-scribes`  
-**Presentation Date:** End of April 2026
+**Presentation Date:** 20 May 2026
 
 ---
 
@@ -78,12 +78,18 @@ The system uses infrared (IR) technology to function in low-light or night condi
 ## 🔧 Hardware Components
 
 | Component | Description | Quantity | Purpose |
-|---|---|---|---|
-| [e.g. Arduino Uno] | [Brief description] | [1] | [e.g. Main microcontroller] |
-| [e.g. DHT11 Sensor] | [Brief description] | [1] | [e.g. Temperature & humidity sensing] |
-| [e.g. ESP8266 Wi-Fi Module] | [Brief description] | [1] | [e.g. Wireless connectivity] |
-| [Add more rows as needed] | | | |
-
+| :--- | :--- | :--- | :--- |
+| Raspberry Pi 4 | Single-board computer | 1 | Main processor and controller |
+| MicroSD Card 32GB | Flash storage media | 1 | Operating system and local data storage |
+| NoIR Camera | Infrared-sensitive camera module | 1 | Capturing images/video, particularly in low light |
+| IR LEDs | Infrared light-emitting diodes | 4 | Providing invisible illumination for the NoIR camera |
+| Motor DC | Direct current motor | 1 | Providing physical movement/actuation |
+| Motor Driver L298N | Dual H-bridge motor controller | 1 | Controlling the speed and direction of the DC motor |
+| Motor Battery | Battery power source | 1 | Dedicated power supply for the motor |
+| 2 Channel Relay Board | Electromechanical switch board | 1 | Controlling high-power/voltage devices safely |
+| Power Supply | AC/DC power adapter | 1 | Powering the Raspberry Pi |
+| 330Ω Resistors | Passive electrical component | [Specify] | Limiting current in circuits |
+| Micro HDMI to HDMI cable | Video display cable | 1 | Connecting the Raspberry Pi to a monitor |
 ---
 
 ## 💻 Software & Technologies
