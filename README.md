@@ -88,7 +88,6 @@ The system uses infrared (IR) technology to function in low-light or night condi
 | Motor Battery | Battery power source | 1 | Dedicated power supply for the motor |
 | 2 Channel Relay Board | Electromechanical switch board | 1 | Controlling high-power/voltage devices safely |
 | Power Supply | AC/DC power adapter | 1 | Powering the Raspberry Pi |
-| 330Ω Resistors | Passive electrical component | [Specify] | Limiting current in circuits |
 | Micro HDMI to HDMI cable | Video display cable | 1 | Connecting the Raspberry Pi to a monitor |
 ---
 
