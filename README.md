@@ -555,9 +555,9 @@ if __name__ == "__main__":
 
 | Test # | Description | Expected Result | Actual Result | Pass/Fail |
 |---|---|---|---|---|
-| 1 | [e.g. Sensor reads temperature] | [e.g. ±2°C accuracy] | [e.g. ±1.5°C] | ✅ Pass |
-| 2 | [e.g. Wi-Fi transmission] | [e.g. Every 10s] | | |
-
+| 1 |NoIR takes the picture | successfully captured your pictures | file saved | ✅ Pass |
+| 2 | Gui verifies the picture | recognition successfully |motor runs |✅ Pass |
+| 3 | Gui verifies an unregistered user | recognition unsuccessfull | motor doesnt run |✅ Pass |
 ---
 
 ## ⚠️ Challenges & Solutions
@@ -571,8 +571,8 @@ if __name__ == "__main__":
 
 ## 🎥 Project Demonstration
 
-- 📹 **Demo Video:** [Insert link here]
-- 📊 **Presentation Slides:** [Insert link here]
+- 📹 **Demo Video:** [https://we.tl/t-QmCiW5JmK1eeSpes]
+- 📊 **Presentation Slides:** [https://canva.link/5uzpkgjfu6mxgbv]
 
 
 ---
