@@ -179,7 +179,7 @@ The system uses infrared (IR) technology to function in low-light or night condi
 
 ## 🖥️ Code Documentation
 
-### Main Firmware (e.g., `main.ino`)
+### Training Script (train.py)
 
 ```cpp
 import cv2
