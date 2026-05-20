@@ -68,7 +68,7 @@ The system uses infrared (IR) technology to function in low-light or night condi
 
 ## 🏗️ System Architecture & Design
 
-![System Architecture Diagram]("C:\Users\Admin\Documents\IOT\Systems Archetechture.jpeg")
+![System Architecture Diagram]("https://we.tl/t-FHpaAsQotpOH60bt")
 
 ### Design Decisions
 > _
