@@ -68,10 +68,17 @@ The system uses infrared (IR) technology to function in low-light or night condi
 
 ## 🏗️ System Architecture & Design
 
-![System Architecture Diagram](images/architecture_diagram.png)
+![System Architecture Diagram]("C:\Users\Admin\Documents\IOT\Systems Archetechture.jpeg")
 
 ### Design Decisions
-> _Explain the key design decisions your group made._
+> _
+To achieve a secure, responsive, and isolated IoT prototype for facial-recognition-based engine access, the following key design decisions were made:
+
+* **Central Computing Unit (Raspberry Pi):** A Raspberry Pi was selected as the core controller instead of a standard microcontroller. This decision was driven by the computational demands of running real-time AI facial recognition algorithms locally while simultaneously hosting a lightweight Flask web server.
+* **Circuit Isolation via Relay Module:** The system incorporates a dedicated Relay Module to isolate the low-voltage control electronics from the high-voltage drivetrain components. The Raspberry Pi operates on $5\text{V}$ logic, whereas the DC Motor (simulating the engine ignition) is powered by a heavy-duty $12\text{V}$ sealed lead-acid battery. Using a relay prevents high-current surges and back-EMF from damaging the Pi.
+* **Fail-Safe Ignition (Normally Open Configuration):** The DC motor is wired to the **Normally Open (NO)** terminal of the relay. This ensures that in the event of a system crash, power loss, or software failure, the ignition circuit defaults to an open (disengaged) state, prioritizing safety.
+* **High-Bandwidth Camera Interface (CSI Ribbon Cable):** The Pi Camera is integrated using a native CSI ribbon cable rather than a USB interface. This provides a direct, high-speed bus link to the Pi's processor, drastically reducing video latency and optimizing the processing speed of the AI facial recognition model.
+* **Decoupled Wireless User Interface (Flask & Wi-Fi):** Rather than relying on physical buttons or tethered displays, the user interface is completely decoupled using a Web Browser-based UI (`index.html`). By hosting a Flask web server on the Pi accessible over Wi-Fi, users can securely monitor status and command actions (Scan, Start, Stop) from any authorized device on the local network._
 
 ---
 
