@@ -108,23 +108,75 @@ The system uses infrared (IR) technology to function in low-light or night condi
 
 | Component Pin | Microcontroller Pin | Notes |
 |---|---|---|
-| [e.g. DHT11 DATA] | [e.g. D2] | [Pull-up resistor required] |
-| [e.g. LED +] | [e.g. D13] | [220Ω resistor in series] |
-
+| Relay IN | GPIO 17 (Pin 11) | Control signal from Pi |
+| Relay VCC | 5V (Pin 2) | Power for relay module |
+| Relay GND | GND (Pin 6) | Common ground |
+| Motor + | Relay COM | Switched by relay |
+| Motor - | Battery GND | Common ground |
+| Battery + | Relay NO | Normally Open — motor off by default |
 ---
 
 ## 🏭 Build Process (with photos)
 
-### Step 1: [Step Title]
-> _Description of what was done._
+## Steps to Install Raspberry Pi OS
 
-![Step 1 Photo](images/build_step1.jpg)
+1. **Download Raspberry Pi Imager**
+   * Go to the official [Raspberry Pi Imager page](https://www.raspberrypi.com/software/).
+   * Download and install it on your laptop or PC.
 
-### Step 2: [Step Title]
-> _Description of what was done._
+2. **Insert Your microSD Card**
+   * Put the microSD card into your computer using:
+     * A built-in SD slot, or
+     * A USB card reader.
+   * *Note: A 16GB or larger card is recommended.*
 
-![Step 2 Photo](images/build_step2.jpg)
+3. **Open Raspberry Pi Imager**
+   * Launch the application. You will see 3 main options:
+     * Choose Device
+     * Choose OS
+     * Choose Storage
 
+4. **Choose Device**
+   * Select your Raspberry Pi model (for example, **Raspberry Pi 4**).
+
+5. **Choose Operating System**
+   * Select **Raspberry Pi OS (64-bit)**. This is the normal recommended operating system.
+
+6. **Choose Storage**
+   * Select your microSD card.
+   > **Warning:** Be careful to choose the correct drive because it will be completely erased.
+
+7. **Write the OS**
+   * Click **Next** or **Write**.
+   * The software will:
+     * Download Raspberry Pi OS
+     * Install it onto the SD card
+     * Verify the installation
+   * *This may take a few minutes.*
+
+8. **Insert the SD Card into the Raspberry Pi**
+   * After the installation finishes:
+     * Remove the SD card safely from your computer.
+     * Insert it into the Raspberry Pi.
+
+9. **Connect Everything**
+   * Connect the following to your Pi:
+     * HDMI cable to a monitor/TV
+     * Keyboard
+     * Mouse
+     * Power supply
+
+10. **Power On the Raspberry Pi**
+    * Plug in the power supply. The Raspberry Pi will boot into Raspberry Pi OS automatically.
+    * You’ll then complete the first-time setup for:
+      * Language
+      * Wi-Fi
+      * Password
+      * Updates
+
+***
+
+**Success!** After that, Raspberry Pi OS is installed and ready to use.
 ---
 
 ## 🖥️ Code Documentation
@@ -165,8 +217,8 @@ void loop() {
 
 | Challenge Encountered | Solution Applied |
 |---|---|
-| [e.g. Wi-Fi connection drops] | [e.g. Added reconnect logic] |
-| [e.g. Noisy sensor readings] | [e.g. Applied moving average filter] |
+| [Configuring the Rasberry Pi via a laptop] | [We used a kewyboard and a mouse.] |
+| [Using a USB Port from a PC as the primary power source] | [Using a powerbank as our primary electric source] |
 
 ---
 
@@ -174,14 +226,15 @@ void loop() {
 
 - 📹 **Demo Video:** [Insert link here]
 - 📊 **Presentation Slides:** [Insert link here]
-- 🔗 **Live Dashboard (if applicable):** [Insert link here]
+
 
 ---
 
 ## 📚 References
 
-1. [Reference Title](https://link-to-reference.com) — _Brief description_
-2. [Reference Title](https://link-to-reference.com) — _Brief description_
+1. [How to Setup the Raspberry Pi NoIR Camera
+V2 8MP](https://youtu.be/bpzGN35oaJ4?si=rX-MXX4XT5EObkdQ) — _This video served as our primary visual guide, providing the step-by-step instructions we used to manually assemble, configure, and figure out the hardware prototype._
+
 
 ---
 
