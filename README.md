@@ -247,14 +247,308 @@ print("People trained:", label_map)
 print("Total faces:", len(faces))
 ```
 
-### Key Functions
+### Auto Capture Script (autocapture.py)
+
+```cpp
+import cv2
+import os
+import time
+from picamera2 import Picamera2
+
+name = input("Enter person's name: ")
+folder = f"AuthorizedFaces/{name}"
+os.makedirs(folder, exist_ok=True)
+
+picam2 = Picamera2()
+picam2.configure(picam2.create_preview_configuration(main={"format": "RGB888", "size": (320, 240)}))
+picam2.start()
+
+finder = cv2.CascadeClassifier("/usr/share/opencv4/haarcascades/haarcascade_frontalface_default.xml")
+
+count = 0
+total = 5
+
+print(f"Capturing 5 photos for: {name}")
+print("Get in front of the camera — auto capturing every 2 seconds...")
+time.sleep(2)  # give time to get in position
+
+while count < total:
+    frame = picam2.capture_array()
+    frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+
+    faces = finder.detectMultiScale(gray, 1.3, 5)
+
+    if len(faces) > 0:
+        count += 1
+        cv2.imwrite(f"{folder}/{count}.jpg", frame)
+        print(f"✅ Captured {count}/{total} — face detected")
+    else:
+        print("❌ No face detected — adjusting position...")
+
+    time.sleep(2)
+
+picam2.stop()
+print(f"\nDone! Saved {count} photos for: {name}")
+print("Now run train.py")
+```
+### Camera Modue (camera.py)
+
+```cpp
+import cv2
+from datetime import datetime
+from picamera2 import Picamera2
+
+class Camera:
+    def __init__(self):
+        # ---------------- CAMERA ----------------
+        self.picam2 = Picamera2()
+        self.picam2.configure(
+            self.picam2.create_preview_configuration(
+                main={"format": "RGB888", "size": (320, 240)}
+            )
+        )
+        self.picam2.start()
+
+        # ---------------- FACE DETECTOR ----------------
+        self.face_cascade = cv2.CascadeClassifier(
+            "/usr/share/opencv4/haarcascades/haarcascade_frontalface_default.xml"
+        )
+
+        # ---------------- TRAINED MODEL ----------------
+        self.recognizer = cv2.face.LBPHFaceRecognizer_create()
+        self.recognizer.read("trainer.yml")
+
+    # ---------------- GET FRAME ----------------
+    def get_frame(self):
+        frame = self.picam2.capture_array()
+        return cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
+
+    # ---------------- FACE CHECK ----------------
+    def check_face(self):
+        frame = self.get_frame()
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        faces = self.face_cascade.detectMultiScale(gray, 1.2, 5)
+
+        allowed = False
+        who = "Unknown"
+        msg = "Access Denied"
+
+        for (x, y, w, h) in faces:
+            face = gray[y:y+h, x:x+w]
+            face = cv2.resize(face, (200, 200))
+
+            try:
+                id_, score = self.recognizer.predict(face)
+            except:
+                continue
+
+            print("ID:", id_, "Score:", score)
+
+            if score < 80:
+                allowed = True
+                who = "Authorized Driver"
+                msg = "Access Granted"
+
+        return {
+            "allowed": allowed,
+            "who": who,
+            "msg": msg,
+            "time": datetime.now().strftime("%H:%M:%S")
+        }
+
+    # ---------------- STREAM ----------------
+    def generate_frames(self):
+        while True:
+            frame = self.picam2.capture_array()
+            frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
+            frame = cv2.resize(frame, (320, 240))
+            _, buffer = cv2.imencode(".jpg", frame)
+            yield (
+                b"--frame\r\n"
+                b"Content-Type: image/jpeg\r\n\r\n" +
+                buffer.tobytes() +
+                b"\r\n"
+            )
+```
+
+### Motor Controller (motor.py)
+
+```cpp
+import RPi.GPIO as GPIO
+
+RELAY_PIN = 17
+
+class Motor:
+    def __init__(self):
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setwarnings(False)
+        GPIO.setup(RELAY_PIN, GPIO.OUT)
+
+        # ✅ Motor OFF on startup
+        GPIO.output(RELAY_PIN, GPIO.LOW)
+        self.running = False
+        self.authorised = False
+
+    # ---------------- START ----------------
+    def start(self):
+        print("start() called — authorised:", self.authorised)
+        GPIO.output(RELAY_PIN, GPIO.HIGH)
+        self.running = True
+
+    # ---------------- STOP ----------------
+    def stop(self):
+        GPIO.output(RELAY_PIN, GPIO.LOW)
+        self.running = False
+        self.authorised = False
+
+    # ---------------- GRANT ACCESS ----------------
+    def grant_access(self):
+        print("grant_access() called")
+        self.authorised = True
+
+    # ---------------- DENY ACCESS ----------------
+    def deny_access(self):
+        self.authorised = False
+        self.stop()
+
+    # ---------------- STATUS ----------------
+    def status(self):
+        return {"running": self.running}
+
+    # ---------------- CLEANUP ----------------
+    def cleanup(self):
+        self.stop()
+        GPIO.cleanup()
+```
+
+### Web Server (server.py)
+
+```cpp
+import os
+os.environ["LIBCAMERA_LOG_LEVELS"] = "3"
+
+from flask import Flask, Response, jsonify
+from camera import Camera
+from motor import Motor
+import atexit
+
+app = Flask(__name__)
+camera = Camera()
+motor = Motor()  # ✅ Motor OFF on startup
+
+# ---------------- HOME PAGE ----------------
+@app.route("/")
+def home():
+    return open("Website/index.html").read()
+
+# ---------------- LIVE VIDEO ----------------
+@app.route("/live")
+def live():
+    return Response(
+        camera.generate_frames(),
+        mimetype="multipart/x-mixed-replace; boundary=frame"
+    )
+
+# ---------------- SCAN FACE ----------------
+@app.route("/scan", methods=["POST"])
+def scan():
+    result = camera.check_face()
+
+    if result["allowed"]:
+        motor.grant_access()   # ✅ Unlock — Start button enables in UI
+    else:
+        motor.deny_access()    # ✅ Lock and keep motor off
+
+    return jsonify(result)
+
+# ---------------- START ----------------
+@app.route("/start", methods=["POST"])
+def start():
+    if motor.authorised:       # ✅ Auth check here
+        motor.start()
+        return jsonify({"msg": "Engine Started ✅", "started": True})
+    else:
+        return jsonify({"msg": "Access Denied — Scan face first ❌", "started": False})
+
+# ---------------- STOP ----------------
+@app.route("/stop", methods=["POST"])
+def stop():
+    motor.stop()
+    return jsonify({"msg": "Engine Stopped ⛔"})
+
+# ---------------- CLEAN EXIT ----------------
+@atexit.register
+def cleanup():
+    motor.cleanup()
+
+# ---------------- RUN SERVER ----------------
+if __name__ == "__main__":
+    app.run(
+        host="0.0.0.0",
+        port=5000,
+        debug=False,
+        threaded=True
+    )
+```
+
+### Key Functions: Training Script (`train.py`)
+
+| Step / Block | Description |
+|---|---|
+| **Initialization** | Sets up the Haar Cascade classifier for detection and LBPH recognizer for training. |
+| **Directory Parsing** | Loops through the `AuthorizedFaces` folder to find individual user subdirectories. |
+| **Image Processing** | Converts images to grayscale, resizes them, and crops out the detected face region. |
+| **Model Training** | Compiles the validated faces and ID labels into an LBPH model. |
+| **Output** | Writes the compiled model data to a `trainer.yml` file for future verification. |
+
+---
+
+### Key Functions: Auto Capture (`autocapture.py`)
+
+| Step / Block | Description |
+|---|---|
+| **Setup** | Prompts the user for a name and creates a dedicated folder under `AuthorizedFaces`. |
+| **Camera Config** | Initializes `Picamera2` to capture low-latency RGB images. |
+| **Capture Loop** | Takes an image every 2 seconds until 5 valid faces are detected and saved. |
+
+---
+
+### Key Functions: Camera Module (`camera.py`)
 
 | Function Name | Description |
 |---|---|
-| `setup()` | Initializes hardware peripherals and serial communication |
-| `loop()` | Main execution loop |
-| `[yourFunction()]` | [Describe it] |
+| `__init__()` | Initializes the Pi camera, loads the Haar cascade, and loads the `trainer.yml` model. |
+| `get_frame()` | Captures a raw array frame from the camera and converts it to BGR format. |
+| `check_face()` | Runs detection on the current frame, predicts against the trained model, and returns authorization status. |
+| `generate_frames()` | Yields continuous JPEG encoded frames for live video streaming on the web server. |
 
+---
+
+### Key Functions: Motor Controller (`motor.py`)
+
+| Function Name | Description |
+|---|---|
+| `__init__()` | Sets up the Raspberry Pi GPIO pins and ensures the relay (motor) is OFF by default. |
+| `start()` | Triggers the GPIO relay HIGH to turn the motor on and flags it as running. |
+| `stop()` | Triggers the GPIO relay LOW to turn the motor off and resets authorization. |
+| `grant_access()` | Sets the internal state to authorized, allowing the engine to be started via the server. |
+| `deny_access()` | Revokes authorization and forces the motor to stop. |
+| `status()` | Returns the current running state of the motor as a dictionary. |
+| `cleanup()` | Safely stops the motor and releases GPIO resources. |
+
+---
+
+### Key Functions: Web Server (`server.py`)
+
+| Route / Function | Description |
+|---|---|
+| `home()` (`/`) | Serves the main HTML user interface. |
+| `live()` (`/live`) | Provides the multipart video stream feed from the camera module. |
+| `scan()` (`/scan`) | Triggers a face check. Grants or denies motor access based on the result. |
+| `start()` (`/start`) | Starts the motor if `motor.authorised` is True; otherwise returns an access denied error. |
+| `stop()` (`/stop`) | Stops the motor immediately. |
+| `cleanup()` | Registered with `atexit` to ensure GPIO resources are freed if the server crashes or closes. |
 ---
 
 ## 🧪 Testing & Results
