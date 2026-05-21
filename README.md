@@ -100,10 +100,16 @@ To achieve a secure, responsive, and isolated IoT prototype for facial-recogniti
 
 | Tool / Platform | Purpose |
 |---|---|
-| [e.g. Arduino IDE] | [Firmware development] |
-| [e.g. MQTT / Node-RED] | [Data communication / dashboard] |
-| [e.g. GitHub] | [Version control & documentation] |
-| [e.g. Fritzing] | [Circuit design] |
+| Python 3 | Main programming language used for facial recognition and GPIO control |
+| OpenCV | Image processing and real-time camera video handling |
+| face_recognition Library | AI-based facial recognition and face matching |
+| Raspberry Pi OS | Operating system running on the Raspberry Pi 4 |
+| Raspberry Pi Imager | Installing and configuring Raspberry Pi OS on the MicroSD card |
+| Thonny IDE | Writing, editing, and testing Python code on the Raspberry Pi |
+| GitHub | Version control, collaboration, and project documentation |
+| libcamera | Capturing images and testing the Raspberry Pi camera |
+| GPIO Library (RPi.GPIO) | Controlling the relay module using Raspberry Pi GPIO pins |
+| Markdown | Formatting and documenting the project on GitHub |
 
 ---
 
@@ -571,9 +577,21 @@ if __name__ == "__main__":
 
 | Challenge Encountered | Solution Applied |
 |---|---|
-| [Configuring the Rasberry Pi via a laptop] | [We used a kewyboard and a mouse.] |
-| [Using a USB Port from a PC as the primary power source] | [Using a powerbank as our primary electric source] |
-
+| [Configuring the Raspberry Pi Raspberry Pi using only a laptop] | [We used an external keyboard, mouse, and monitor to complete the initial setup and configuration properly.] |
+| [Using a USB port from a PC as the primary power source] | [We switched to a power bank with stable 5V output to provide reliable power to the Raspberry Pi.] |
+| [Relay not activating correctly during testing] | [We checked the GPIO pin connections and corrected the wiring between the Raspberry Pi and relay module.] |
+| [Motor not spinning after relay activation] | [We discovered the motor required a separate battery source because the Raspberry Pi could not provide enough power.] |
+| [Incorrect motor wiring on the relay screw terminals] | [We identified the correct COM and NO terminals and rewired the motor circuit correctly.] |
+| [Difficulty understanding GPIO pin numbering] | [We used a Raspberry Pi GPIO pin diagram to identify the correct pins for power, ground, and signal connections.] |
+| [Camera not detected by the Raspberry Pi] | [We reinserted the camera ribbon cable correctly and enabled the camera interface in Raspberry Pi settings.] |
+| [Facial recognition failing in low-light conditions] | [We used a NoIR camera together with IR LEDs to improve visibility and detection at night.] |
+| [Unauthorized faces sometimes triggering the motor] | [We retrained the system using clearer facial images and adjusted the recognition logic in Python.] |
+| [Python libraries failing to install] | [We updated the Raspberry Pi OS and installed required dependencies step-by-step using terminal commands.] |
+| [Loose jumper wire connections causing unstable behavior] | [We secured all jumper wires firmly on the breadboard and relay pins.] |
+| [Managing multiple hardware connections inside the mini car body] | [We used a 3D-printed chassis and cable management to organize the components neatly.] |
+| [Team members having different levels of electronics knowledge] | [We divided responsibilities and helped each other understand the hardware and software step-by-step.] |
+| [Balancing motor power and Raspberry Pi safet] | [We isolated motor power from Raspberry Pi power to avoid damaging the board.] |
+| [Integrating AI facial recognition with hardware control] | [We connected the Python facial recognition script to the relay GPIO control logic successfully.] |
 ---
 
 ## 🎥 Project Demonstration
